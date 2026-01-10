@@ -3,7 +3,6 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import GownCard from "@/components/GownCard";
 import { Search, X, ChevronDown, SlidersHorizontal } from "lucide-react";
 import type { Gown } from "@/lib/sheets";
@@ -559,8 +558,6 @@ function SearchPageContent() {
           )}
         </motion.div>
       </main>
-
-      <Footer />
     </div>
   );
 }

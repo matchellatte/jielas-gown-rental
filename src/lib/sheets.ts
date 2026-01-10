@@ -77,11 +77,37 @@ export async function getGownsFromSheet(): Promise<Gown[]> {
       console.warn('No data found in Google Sheets');
       return [];
     }
+    
+    // Filter out rows that have an ID but no meaningful details
+    const validRows = rows.filter((row) => {
+      const id = row[0]?.toString().trim();
+      if (!id) return false;
 
-    console.log(`Fetched ${rows.length} gowns from Google Sheets`);
+      // Check if any of the main fields (name, category, description, price, image, measurements)
+      // actually contain data. This prevents mostly-empty template rows from showing up.
+      const detailColumns = [
+        row[1], // name
+        row[2], // category
+        row[3], // description
+        row[4], // waist
+        row[5], // bust
+        row[6], // length
+        row[7], // color
+        row[8], // size
+        row[9], // price
+        row[11], // image URL
+      ];
 
-    return rows
-      .filter(row => row[0]) // Only process rows with an ID
+      const hasDetails = detailColumns.some((value) => {
+        return typeof value === 'string' && value.trim() !== '';
+      });
+
+      return hasDetails;
+    });
+
+    console.log(`Fetched ${rows.length} rows, using ${validRows.length} valid gowns from Google Sheets`);
+
+    return validRows
       .map((row, index) => {
         const gown: Gown = {
           id: row[0] || `gown-${index + 1}`,
