@@ -137,12 +137,14 @@ export default function Header() {
               </button>
 
               {/* Rent Now Button - Hidden on mobile */}
-              <Link 
-                href="/rent-now"
+              <a 
+                href="https://www.facebook.com/JielaGownForRentOrmoc"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hidden md:inline-block bg-black text-white px-6 py-2 text-sm font-medium hover:bg-gray-800 transition-colors"
               >
                 Rent Now
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -236,13 +238,15 @@ export default function Header() {
                 FAQS
               </Link>
 
-              <Link 
-                href="/rent-now"
+              <a 
+                href="https://www.facebook.com/JielaGownForRentOrmoc"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block w-full text-center bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors mt-4"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Rent Now
-              </Link>
+              </a>
             </div>
           </div>
         )}

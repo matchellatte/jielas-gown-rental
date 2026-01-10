@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import GownCard from "@/components/GownCard";
-import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import type { Gown } from "@/lib/sheets";
+import { motion } from "framer-motion";
+import MobileFilters from "./components/MobileFilters";
+import DesktopFilters from "./components/DesktopFilters";
 
 const categoryMap: Record<string, string> = {
   "long-gowns": "Long Gowns",
@@ -145,7 +147,12 @@ export default function CategoryPage({ params }: PageProps) {
         </p>
       </div>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <motion.main 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+      >
         {/* Category Header */}
         <div className="mb-8">
           <h1 className="text-4xl md:text-5xl font-light tracking-wide text-gray-800 mb-6">
@@ -153,381 +160,39 @@ export default function CategoryPage({ params }: PageProps) {
           </h1>
 
           {/* Filter and Sort Bar */}
-          
-          {/* Filters and Sort - Mobile */}
-          <div className="md:hidden">
-            <div className="flex items-center justify-between mb-8">
-              <button
-                onClick={() => setShowMobileFilters(!showMobileFilters)}
-                className="flex items-center gap-2 text-sm text-gray-700"
-              >
-                <SlidersHorizontal className="h-4 w-4" />
-                Filter and sort
-              </button>
-              <span className="text-sm text-gray-700">{filteredGowns.length} products</span>
-            </div>
+          <MobileFilters
+            showMobileFilters={showMobileFilters}
+            setShowMobileFilters={setShowMobileFilters}
+            filteredGownsCount={filteredGowns.length}
+            availabilityFilter={availabilityFilter}
+            toggleAvailability={toggleAvailability}
+            resetAvailability={resetAvailability}
+            inStockCount={inStockCount}
+            outOfStockCount={outOfStockCount}
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+          />
 
-            {/* Mobile Filter Dropdown */}
-            {showMobileFilters && (
-              <div className="mb-8 border-t pt-6 space-y-6">
-                {/* Availability Filter Mobile */}
-                <div>
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-sm font-medium text-gray-900">Availability</span>
-                    {availabilityFilter.length > 0 && (
-                      <button
-                        onClick={resetAvailability}
-                        className="text-sm text-gray-600 hover:text-black"
-                      >
-                        Reset
-                      </button>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-3 py-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={availabilityFilter.includes("in-stock")}
-                        onChange={() => toggleAvailability("in-stock")}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-sm text-gray-700">In stock ({inStockCount})</span>
-                    </label>
-                    <label className="flex items-center gap-3 py-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={availabilityFilter.includes("out-of-stock")}
-                        onChange={() => toggleAvailability("out-of-stock")}
-                        className="w-4 h-4"
-                      />
-                      <span className="text-sm text-gray-700">Out of stock ({outOfStockCount})</span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* Price Filter Mobile */}
-                <div>
-                  <div className="mb-3">
-                    <span className="text-sm font-medium text-gray-900">Price</span>
-                  </div>
-                  <div className="space-y-2">
-                    <button
-                      onClick={() => {
-                        setPriceRange("all");
-                        setShowMobileFilters(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm ${
-                        priceRange === "all" ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                      }`}
-                    >
-                      All
-                    </button>
-                    <button
-                      onClick={() => {
-                        setPriceRange("under-2000");
-                        setShowMobileFilters(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm ${
-                        priceRange === "under-2000" ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                      }`}
-                    >
-                      Under ₱2,000
-                    </button>
-                    <button
-                      onClick={() => {
-                        setPriceRange("2000-3000");
-                        setShowMobileFilters(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm ${
-                        priceRange === "2000-3000" ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                      }`}
-                    >
-                      ₱2,000 - ₱3,000
-                    </button>
-                    <button
-                      onClick={() => {
-                        setPriceRange("3000-5000");
-                        setShowMobileFilters(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm ${
-                        priceRange === "3000-5000" ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                      }`}
-                    >
-                      ₱3,000 - ₱5,000
-                    </button>
-                    <button
-                      onClick={() => {
-                        setPriceRange("over-5000");
-                        setShowMobileFilters(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm ${
-                        priceRange === "over-5000" ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                      }`}
-                    >
-                      Over ₱5,000
-                    </button>
-                  </div>
-                </div>
-
-                {/* Sort Mobile */}
-                <div>
-                  <div className="mb-3">
-                    <span className="text-sm font-medium text-gray-900">Sort by</span>
-                  </div>
-                  <div className="space-y-2">
-                    <button
-                      onClick={() => {
-                        setSortBy("featured");
-                        setShowMobileFilters(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm ${
-                        sortBy === "featured" ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                      }`}
-                    >
-                      Featured
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSortBy("alphabetical");
-                        setShowMobileFilters(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm ${
-                        sortBy === "alphabetical" ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                      }`}
-                    >
-                      Alphabetically, A-Z
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSortBy("price-low");
-                        setShowMobileFilters(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm ${
-                        sortBy === "price-low" ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                      }`}
-                    >
-                      Price, low to high
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSortBy("price-high");
-                        setShowMobileFilters(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm ${
-                        sortBy === "price-high" ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                      }`}
-                    >
-                      Price, high to low
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Filters and Sort - Desktop */}
-          <div className="hidden md:flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-6">
-              <span className="text-sm text-gray-700">Filter :</span>
-
-              {/* Availability Filter */}
-              <div className="relative">
-                <button
-                  onClick={() => {
-                    setShowAvailabilityDropdown(!showAvailabilityDropdown);
-                    setShowPriceDropdown(false);
-                    setShowSortDropdown(false);
-                  }}
-                  className={`flex items-center gap-2 text-sm text-gray-700 hover:text-black ${
-                    availabilityFilter.length > 0 ? "border-b-2 border-gray-900 pb-1" : ""
-                  }`}
-                >
-                  Availability
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-                {showAvailabilityDropdown && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white shadow-lg border z-50">
-                    <div className="p-4">
-                      <div className="flex justify-between items-center mb-3">
-                        <span className="text-sm text-gray-600">
-                          {availabilityFilter.length} selected
-                        </span>
-                        <button
-                          onClick={resetAvailability}
-                          className="text-sm text-gray-600 hover:text-black"
-                        >
-                          Reset
-                        </button>
-                      </div>
-                      <label className="flex items-center gap-3 py-2 cursor-pointer hover:bg-gray-50">
-                        <input
-                          type="checkbox"
-                          checked={availabilityFilter.includes("in-stock")}
-                          onChange={() => toggleAvailability("in-stock")}
-                          className="w-4 h-4"
-                        />
-                        <span className="text-sm text-gray-700">
-                          In stock ({inStockCount})
-                        </span>
-                      </label>
-                      <label className="flex items-center gap-3 py-2 cursor-pointer hover:bg-gray-50">
-                        <input
-                          type="checkbox"
-                          checked={availabilityFilter.includes("out-of-stock")}
-                          onChange={() => toggleAvailability("out-of-stock")}
-                          className="w-4 h-4"
-                        />
-                        <span className="text-sm text-gray-700">
-                          Out of stock ({outOfStockCount})
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Price Filter */}
-              <div className="relative">
-                <button
-                  onClick={() => {
-                    setShowPriceDropdown(!showPriceDropdown);
-                    setShowAvailabilityDropdown(false);
-                    setShowSortDropdown(false);
-                  }}
-                  className={`flex items-center gap-2 text-sm text-gray-700 hover:text-black ${
-                    priceRange !== "all" ? "border-b-2 border-gray-900 pb-1" : ""
-                  }`}
-                >
-                  Price
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-                {showPriceDropdown && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white shadow-lg border z-50">
-                    <button
-                      onClick={() => {
-                        setPriceRange("all");
-                        setShowPriceDropdown(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                    >
-                      All Prices
-                    </button>
-                    <button
-                      onClick={() => {
-                        setPriceRange("under-2000");
-                        setShowPriceDropdown(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                    >
-                      Under ₱2,000
-                    </button>
-                    <button
-                      onClick={() => {
-                        setPriceRange("2000-3000");
-                        setShowPriceDropdown(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                    >
-                      ₱2,000 - ₱3,000
-                    </button>
-                    <button
-                      onClick={() => {
-                        setPriceRange("3000-5000");
-                        setShowPriceDropdown(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                    >
-                      ₱3,000 - ₱5,000
-                    </button>
-                    <button
-                      onClick={() => {
-                        setPriceRange("over-5000");
-                        setShowPriceDropdown(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                    >
-                      Over ₱5,000
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-700">{filteredGowns.length} products</span>
-              
-              {/* Sort Dropdown */}
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-700">Sort by :</span>
-                <div className="relative">
-                  <button
-                    onClick={() => {
-                      setShowSortDropdown(!showSortDropdown);
-                      setShowAvailabilityDropdown(false);
-                      setShowPriceDropdown(false);
-                    }}
-                    className="flex items-center gap-2 text-sm text-gray-700 hover:text-black"
-                  >
-                    {sortBy === "featured" && "Featured"}
-                    {sortBy === "name-az" && "Name: A-Z"}
-                    {sortBy === "name-za" && "Name: Z-A"}
-                    {sortBy === "price-low" && "Price: Low to High"}
-                    {sortBy === "price-high" && "Price: High to Low"}
-                    <ChevronDown className="h-4 w-4" />
-                  </button>
-                  {showSortDropdown && (
-                    <div className="absolute top-full right-0 mt-2 w-48 bg-white shadow-lg border z-50">
-                      <button
-                        onClick={() => {
-                          setSortBy("featured");
-                          setShowSortDropdown(false);
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      >
-                        Featured
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSortBy("name-az");
-                          setShowSortDropdown(false);
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      >
-                        Name: A-Z
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSortBy("name-za");
-                          setShowSortDropdown(false);
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      >
-                        Name: Z-A
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSortBy("price-low");
-                          setShowSortDropdown(false);
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      >
-                        Price: Low to High
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSortBy("price-high");
-                          setShowSortDropdown(false);
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      >
-                        Price: High to Low
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+          <DesktopFilters
+            availabilityFilter={availabilityFilter}
+            showAvailabilityDropdown={showAvailabilityDropdown}
+            setShowAvailabilityDropdown={setShowAvailabilityDropdown}
+            setShowPriceDropdown={setShowPriceDropdown}
+            setShowSortDropdown={setShowSortDropdown}
+            toggleAvailability={toggleAvailability}
+            resetAvailability={resetAvailability}
+            inStockCount={inStockCount}
+            outOfStockCount={outOfStockCount}
+            priceRange={priceRange}
+            showPriceDropdown={showPriceDropdown}
+            setPriceRange={setPriceRange}
+            sortBy={sortBy}
+            showSortDropdown={showSortDropdown}
+            setSortBy={setSortBy}
+            filteredGownsCount={filteredGowns.length}
+          />
         </div>
 
         {/* Gowns Grid */}
@@ -547,7 +212,7 @@ export default function CategoryPage({ params }: PageProps) {
             <p className="text-gray-500">Please check back soon!</p>
           </div>
         )}
-      </main>
+      </motion.main>
     </div>
   );
 }

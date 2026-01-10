@@ -19,8 +19,13 @@ export interface Gown {
 function formatGoogleDriveUrl(url: string): string {
   if (!url || url === '/placeholder-gown.jpg') return '/placeholder-gown.jpg';
   
-  // If already in uc?id= format, return as is
+  // If already in uc?id= format, convert to thumbnail for faster loading
   if (url.includes('drive.google.com/uc?id=')) {
+    const idMatch = url.match(/id=([^&]+)/);
+    if (idMatch) {
+      // Use Google Drive's thumbnail/export API for faster loading
+      return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w1000`;
+    }
     return url;
   }
   
@@ -39,9 +44,9 @@ function formatGoogleDriveUrl(url: string): string {
     fileId = openMatch[1];
   }
   
-  // If we found a file ID, format it properly
+  // If we found a file ID, use thumbnail API for faster loading
   if (fileId) {
-    return `https://drive.google.com/uc?id=${fileId}`;
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
   }
   
   // If no pattern matched, return original URL

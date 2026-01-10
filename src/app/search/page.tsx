@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import GownCard from "@/components/GownCard";
 import { Search, X, ChevronDown, SlidersHorizontal } from "lucide-react";
 import type { Gown } from "@/lib/sheets";
+import { motion } from "framer-motion";
 
 function SearchPageContent() {
   const searchParams = useSearchParams();
@@ -135,7 +136,12 @@ function SearchPageContent() {
       <Header />
 
       <main className="flex-1">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+        >
           {/* Search Header */}
           <div className="mb-8">
             <h1 className="text-3xl md:text-4xl font-light tracking-wide text-gray-800 mb-6 text-center">
@@ -551,7 +557,7 @@ function SearchPageContent() {
               ))}
             </div>
           )}
-        </div>
+        </motion.div>
       </main>
 
       <Footer />

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import { ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface FAQItem {
   question: string;
@@ -71,7 +72,12 @@ export default function FAQs() {
     <div className="min-h-screen bg-white">
       <Header />
       
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <motion.main 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+      >
         <h1 className="text-5xl font-light tracking-wide text-gray-800 mb-16 text-center">
           FAQS
         </h1>
@@ -103,7 +109,7 @@ export default function FAQs() {
             </div>
           ))}
         </div>
-      </main>
+      </motion.main>
     </div>
   );
 }

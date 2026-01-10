@@ -1,9 +1,10 @@
+'use client';
+
 import Header from "@/components/Header";
 import HeroBanner from "@/components/HeroBanner";
 import Link from "next/link";
 import Image from "next/image";
-
-export const revalidate = 60;
+import { motion } from "framer-motion";
 
 const categories = [
   {
@@ -41,7 +42,13 @@ export default function Home() {
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" id="collections">
         {/* Shop by Collection Section */}
-        <div className="mb-12">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+          className="mb-12"
+        >
           <h2 className="text-3xl md:text-4xl font-light tracking-wide text-gray-800 mb-10 text-center">
             Shop by collection
           </h2>
@@ -68,10 +75,16 @@ export default function Home() {
               </Link>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Store Fitting Section */}
-        <div className="mb-16 -mx-4 sm:-mx-6 lg:-mx-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="mb-16 -mx-4 sm:-mx-6 lg:-mx-8"
+        >
           <div className="relative w-full h-[400px] md:h-[500px]">
             <Image
               src="/store-fitting.jpg"
@@ -98,7 +111,7 @@ export default function Home() {
               </a>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* CTA Section */}
         <div className="text-center bg-gray-50 rounded-lg p-12 mt-16">
