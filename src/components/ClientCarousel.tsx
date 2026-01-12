@@ -118,19 +118,19 @@ export default function ClientCarousel() {
             onClick={() => setIsLightboxOpen(false)}
           >
             <motion.div
-              className="relative w-full max-w-4xl max-h-[90vh]"
+              className="relative w-full max-w-3xl max-h-[80vh] mx-auto"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ duration: 0.25 }}
               onClick={(e) => e.stopPropagation()}
-            >
+              >
               <Image
                 src={carouselImages[currentIndex]}
                 alt={`Client wearing gown ${currentIndex + 1}`}
-                width={1600}
-                height={900}
-                className="w-full h-full object-contain rounded-lg"
+                width={1400}
+                height={1400}
+                className="w-full h-full max-h-[80vh] object-contain rounded-lg bg-black"
               />
 
               <button
