@@ -28,9 +28,11 @@ export default function CategoryPage({ params }: PageProps) {
   const [filteredGowns, setFilteredGowns] = useState<Gown[]>([]);
   const [loading, setLoading] = useState(true);
   const [availabilityFilter, setAvailabilityFilter] = useState<string[]>([]);
+    const [colorFilter, setColorFilter] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("featured");
   const [showAvailabilityDropdown, setShowAvailabilityDropdown] = useState(false);
+    const [showColorDropdown, setShowColorDropdown] = useState(false);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -75,6 +77,15 @@ export default function CategoryPage({ params }: PageProps) {
       });
     }
 
+    // Filter by color
+    if (colorFilter.length > 0) {
+      const selectedColors = colorFilter.map((c) => c.toLowerCase());
+      results = results.filter((gown) => {
+        if (!gown.color) return false;
+        return selectedColors.includes(gown.color.toLowerCase());
+      });
+    }
+
     // Filter by price range
     if (priceRange !== "all") {
       results = results.filter((gown) => {
@@ -114,7 +125,7 @@ export default function CategoryPage({ params }: PageProps) {
     }
 
     setFilteredGowns(results);
-  }, [gowns, availabilityFilter, priceRange, sortBy]);
+  }, [gowns, availabilityFilter, colorFilter, priceRange, sortBy]);
 
   const toggleAvailability = (value: string) => {
     setAvailabilityFilter((prev) =>
@@ -128,8 +139,26 @@ export default function CategoryPage({ params }: PageProps) {
     setAvailabilityFilter([]);
   };
 
+  const toggleColor = (value: string) => {
+    setColorFilter((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
+  };
+
+  const resetColor = () => {
+    setColorFilter([]);
+  };
+
   const inStockCount = gowns.filter((g) => g.available).length;
   const outOfStockCount = gowns.filter((g) => !g.available).length;
+
+  const availableColors = Array.from(
+    new Set(
+      gowns
+        .map((g) => g.color?.trim())
+        .filter((color): color is string => Boolean(color && color.length > 0))
+    )
+  );
 
   if (!resolvedParams) return null;
 
@@ -169,6 +198,10 @@ export default function CategoryPage({ params }: PageProps) {
             resetAvailability={resetAvailability}
             inStockCount={inStockCount}
             outOfStockCount={outOfStockCount}
+            colorFilter={colorFilter}
+            toggleColor={toggleColor}
+            resetColor={resetColor}
+            availableColors={availableColors}
             priceRange={priceRange}
             setPriceRange={setPriceRange}
             sortBy={sortBy}
@@ -179,10 +212,15 @@ export default function CategoryPage({ params }: PageProps) {
             availabilityFilter={availabilityFilter}
             showAvailabilityDropdown={showAvailabilityDropdown}
             setShowAvailabilityDropdown={setShowAvailabilityDropdown}
+            showColorDropdown={showColorDropdown}
+            setShowColorDropdown={setShowColorDropdown}
             setShowPriceDropdown={setShowPriceDropdown}
             setShowSortDropdown={setShowSortDropdown}
             toggleAvailability={toggleAvailability}
             resetAvailability={resetAvailability}
+            colorFilter={colorFilter}
+            toggleColor={toggleColor}
+            resetColor={resetColor}
             inStockCount={inStockCount}
             outOfStockCount={outOfStockCount}
             priceRange={priceRange}
@@ -192,6 +230,7 @@ export default function CategoryPage({ params }: PageProps) {
             showSortDropdown={showSortDropdown}
             setSortBy={setSortBy}
             filteredGownsCount={filteredGowns.length}
+            availableColors={availableColors}
           />
         </div>
 

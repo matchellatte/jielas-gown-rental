@@ -17,9 +17,11 @@ function SearchPageContent() {
   const [searchQuery, setSearchQuery] = useState(queryParam);
   const [filteredGowns, setFilteredGowns] = useState<Gown[]>([]);
   const [availabilityFilter, setAvailabilityFilter] = useState<string[]>([]);
+  const [colorFilter, setColorFilter] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("relevance");
   const [showAvailabilityDropdown, setShowAvailabilityDropdown] = useState(false);
+  const [showColorDropdown, setShowColorDropdown] = useState(false);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -67,6 +69,15 @@ function SearchPageContent() {
       });
     }
 
+    // Filter by color
+    if (colorFilter.length > 0) {
+      const selectedColors = colorFilter.map((c) => c.toLowerCase());
+      results = results.filter((gown) => {
+        if (!gown.color) return false;
+        return selectedColors.includes(gown.color.toLowerCase());
+      });
+    }
+
     // Filter by price range
     if (priceRange !== "all") {
       results = results.filter((gown) => {
@@ -104,7 +115,7 @@ function SearchPageContent() {
     }
 
     setFilteredGowns(results);
-  }, [searchQuery, gowns, availabilityFilter, priceRange, sortBy]);
+  }, [searchQuery, gowns, availabilityFilter, colorFilter, priceRange, sortBy]);
 
   const toggleAvailability = (value: string) => {
     setAvailabilityFilter((prev) =>
@@ -118,8 +129,26 @@ function SearchPageContent() {
     setAvailabilityFilter([]);
   };
 
+  const toggleColor = (value: string) => {
+    setColorFilter((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
+  };
+
+  const resetColor = () => {
+    setColorFilter([]);
+  };
+
   const inStockCount = gowns.filter((g) => g.available).length;
   const outOfStockCount = gowns.filter((g) => !g.available).length;
+
+  const availableColors = Array.from(
+    new Set(
+      gowns
+        .map((g) => g.color?.trim())
+        .filter((color): color is string => Boolean(color && color.length > 0))
+    )
+  );
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -209,8 +238,8 @@ function SearchPageContent() {
                       <label className="flex items-center gap-3 py-2 cursor-pointer">
                         <input
                           type="checkbox"
-                          checked={availabilityFilter.includes("available")}
-                          onChange={() => toggleAvailability("available")}
+                          checked={availabilityFilter.includes("in-stock")}
+                          onChange={() => toggleAvailability("in-stock")}
                           className="w-4 h-4"
                         />
                         <span className="text-sm text-gray-700">In stock</span>
@@ -226,6 +255,39 @@ function SearchPageContent() {
                       </label>
                     </div>
                   </div>
+
+                  {/* Color Filter Mobile */}
+                  {availableColors.length > 0 && (
+                    <div>
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-sm font-medium text-gray-900">Color</span>
+                        {colorFilter.length > 0 && (
+                          <button
+                            onClick={resetColor}
+                            className="text-sm text-gray-600 hover:text-black"
+                          >
+                            Reset
+                          </button>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        {availableColors.map((color) => (
+                          <label
+                            key={color}
+                            className="flex items-center gap-3 py-2 cursor-pointer"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={colorFilter.includes(color)}
+                              onChange={() => toggleColor(color)}
+                              className="w-4 h-4"
+                            />
+                            <span className="text-sm text-gray-700">{color}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Price Filter Mobile */}
                   <div>
@@ -346,6 +408,7 @@ function SearchPageContent() {
                   <button
                     onClick={() => {
                       setShowAvailabilityDropdown(!showAvailabilityDropdown);
+                      setShowColorDropdown(false);
                       setShowPriceDropdown(false);
                       setShowSortDropdown(false);
                     }}
@@ -397,12 +460,70 @@ function SearchPageContent() {
                   )}
                 </div>
 
+                {/* Color Filter */}
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      setShowColorDropdown(!showColorDropdown);
+                      setShowAvailabilityDropdown(false);
+                      setShowPriceDropdown(false);
+                      setShowSortDropdown(false);
+                    }}
+                    className={`flex items-center gap-2 text-sm text-gray-700 hover:text-black ${
+                      colorFilter.length > 0 ? "border-b-2 border-gray-900 pb-1" : ""
+                    }`}
+                  >
+                    {colorFilter.length === 0
+                      ? "Color"
+                      : colorFilter.length === 1
+                      ? colorFilter[0]
+                      : `${colorFilter.length} colors`}
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                  {showColorDropdown && (
+                    <div className="absolute top-full left-0 mt-2 w-56 bg-white shadow-lg border z-50">
+                      <div className="p-4 max-h-64 overflow-y-auto">
+                        <div className="flex justify-between items-center mb-3">
+                          <span className="text-sm text-gray-600">
+                            {colorFilter.length} selected
+                          </span>
+                          <button
+                            onClick={resetColor}
+                            className="text-sm text-gray-600 hover:text-black"
+                          >
+                            Reset
+                          </button>
+                        </div>
+                        {availableColors.length === 0 ? (
+                          <p className="text-sm text-gray-500">No colors available</p>
+                        ) : (
+                          availableColors.map((color) => (
+                            <label
+                              key={color}
+                              className="flex items-center gap-3 py-1.5 cursor-pointer hover:bg-gray-50"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={colorFilter.includes(color)}
+                                onChange={() => toggleColor(color)}
+                                className="w-4 h-4"
+                              />
+                              <span className="text-sm text-gray-700">{color}</span>
+                            </label>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {/* Price Filter */}
                 <div className="relative">
                   <button
                     onClick={() => {
                       setShowPriceDropdown(!showPriceDropdown);
                       setShowAvailabilityDropdown(false);
+                      setShowColorDropdown(false);
                       setShowSortDropdown(false);
                     }}
                     className={`flex items-center gap-2 text-sm text-gray-700 hover:text-black ${

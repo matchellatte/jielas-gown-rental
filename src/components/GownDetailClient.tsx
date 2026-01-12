@@ -63,8 +63,8 @@ export function GownDetailClient({ gown, facebookMessengerLink }: GownDetailClie
           </div>
         )}
 
-        {/* Measurements */}
-        {(gown.waist || gown.bust || gown.length || gown.size) && (
+        {/* Measurements & Color */}
+        {(gown.waist || gown.bust || gown.length || gown.size || gown.color) && (
           <div className="mb-4 sm:mb-6">
             <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">Measurements</h2>
             <div className="space-y-2 text-sm sm:text-base">

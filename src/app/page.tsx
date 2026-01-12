@@ -2,6 +2,7 @@
 
 import Header from "@/components/Header";
 import HeroBanner from "@/components/HeroBanner";
+import ClientCarousel from "@/components/ClientCarousel";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -76,6 +77,8 @@ export default function Home() {
             ))}
           </div>
         </motion.div>
+
+        <ClientCarousel />
 
         {/* Store Fitting Section */}
         <motion.div 

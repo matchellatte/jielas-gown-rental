@@ -6,10 +6,15 @@ interface DesktopFiltersProps {
   availabilityFilter: string[];
   showAvailabilityDropdown: boolean;
   setShowAvailabilityDropdown: (show: boolean) => void;
+  showColorDropdown: boolean;
+  setShowColorDropdown: (show: boolean) => void;
   setShowPriceDropdown: (show: boolean) => void;
   setShowSortDropdown: (show: boolean) => void;
   toggleAvailability: (value: string) => void;
   resetAvailability: () => void;
+  colorFilter: string[];
+  toggleColor: (value: string) => void;
+  resetColor: () => void;
   inStockCount: number;
   outOfStockCount: number;
   priceRange: string;
@@ -19,16 +24,22 @@ interface DesktopFiltersProps {
   showSortDropdown: boolean;
   setSortBy: (sort: string) => void;
   filteredGownsCount: number;
+  availableColors: string[];
 }
 
 export default function DesktopFilters({
   availabilityFilter,
   showAvailabilityDropdown,
   setShowAvailabilityDropdown,
+  showColorDropdown,
+  setShowColorDropdown,
   setShowPriceDropdown,
   setShowSortDropdown,
   toggleAvailability,
   resetAvailability,
+  colorFilter,
+  toggleColor,
+  resetColor,
   inStockCount,
   outOfStockCount,
   priceRange,
@@ -38,6 +49,7 @@ export default function DesktopFilters({
   showSortDropdown,
   setSortBy,
   filteredGownsCount,
+  availableColors,
 }: DesktopFiltersProps) {
   return (
     <div className="hidden md:flex flex-wrap items-center justify-between gap-4 mb-8">
@@ -49,6 +61,7 @@ export default function DesktopFilters({
           <button
             onClick={() => {
               setShowAvailabilityDropdown(!showAvailabilityDropdown);
+              setShowColorDropdown(false);
               setShowPriceDropdown(false);
               setShowSortDropdown(false);
             }}
@@ -100,12 +113,70 @@ export default function DesktopFilters({
           )}
         </div>
 
+        {/* Color Filter */}
+        <div className="relative">
+          <button
+            onClick={() => {
+              setShowColorDropdown(!showColorDropdown);
+              setShowAvailabilityDropdown(false);
+              setShowPriceDropdown(false);
+              setShowSortDropdown(false);
+            }}
+            className={`flex items-center gap-2 text-sm text-gray-700 hover:text-black ${
+              colorFilter.length > 0 ? "border-b-2 border-gray-900 pb-1" : ""
+            }`}
+          >
+            {colorFilter.length === 0
+              ? "Color"
+              : colorFilter.length === 1
+              ? colorFilter[0]
+              : `${colorFilter.length} colors`}
+            <ChevronDown className="h-4 w-4" />
+          </button>
+          {showColorDropdown && (
+            <div className="absolute top-full left-0 mt-2 w-56 bg-white shadow-lg border z-50">
+              <div className="p-4 max-h-64 overflow-y-auto">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-sm text-gray-600">
+                    {colorFilter.length} selected
+                  </span>
+                  <button
+                    onClick={resetColor}
+                    className="text-sm text-gray-600 hover:text-black"
+                  >
+                    Reset
+                  </button>
+                </div>
+                {availableColors.length === 0 ? (
+                  <p className="text-sm text-gray-500">No colors available</p>
+                ) : (
+                  availableColors.map((color) => (
+                    <label
+                      key={color}
+                      className="flex items-center gap-3 py-1.5 cursor-pointer hover:bg-gray-50"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={colorFilter.includes(color)}
+                        onChange={() => toggleColor(color)}
+                        className="w-4 h-4"
+                      />
+                      <span className="text-sm text-gray-700">{color}</span>
+                    </label>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* Price Filter */}
         <div className="relative">
           <button
             onClick={() => {
               setShowPriceDropdown(!showPriceDropdown);
               setShowAvailabilityDropdown(false);
+              setShowColorDropdown(false);
               setShowSortDropdown(false);
             }}
             className={`flex items-center gap-2 text-sm text-gray-700 hover:text-black ${

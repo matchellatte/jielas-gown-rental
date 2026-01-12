@@ -11,6 +11,10 @@ interface MobileFiltersProps {
   resetAvailability: () => void;
   inStockCount: number;
   outOfStockCount: number;
+   colorFilter: string[];
+   toggleColor: (value: string) => void;
+   resetColor: () => void;
+   availableColors: string[];
   priceRange: string;
   setPriceRange: (range: string) => void;
   sortBy: string;
@@ -26,6 +30,10 @@ export default function MobileFilters({
   resetAvailability,
   inStockCount,
   outOfStockCount,
+   colorFilter,
+   toggleColor,
+   resetColor,
+   availableColors,
   priceRange,
   setPriceRange,
   sortBy,
@@ -80,6 +88,39 @@ export default function MobileFilters({
               </label>
             </div>
           </div>
+
+          {/* Color Filter Mobile */}
+          {availableColors.length > 0 && (
+            <div>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-sm font-medium text-gray-900">Color</span>
+                {colorFilter.length > 0 && (
+                  <button
+                    onClick={resetColor}
+                    className="text-sm text-gray-600 hover:text-black"
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+              <div className="space-y-2">
+                {availableColors.map((color) => (
+                  <label
+                    key={color}
+                    className="flex items-center gap-3 py-2 cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={colorFilter.includes(color)}
+                      onChange={() => toggleColor(color)}
+                      className="w-4 h-4"
+                    />
+                    <span className="text-sm text-gray-700">{color}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Price Filter Mobile */}
           <div>
