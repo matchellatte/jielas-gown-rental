@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getGownsFromSheet } from "@/lib/sheets";
 
-// Cache for 5 minutes in production, 1 minute in dev
-export const revalidate = process.env.NODE_ENV === 'production' ? 300 : 60;
+// Cache for 5 minutes - static data updates
+export const revalidate = 300;
 
 export async function GET() {
   try {
