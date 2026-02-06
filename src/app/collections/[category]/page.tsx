@@ -12,6 +12,8 @@ const categoryMap: Record<string, string> = {
   "long-gowns": "Long Gowns",
   "ball-gowns": "Ball Gowns",
   "modern-filipinianas": "Modern Filipinianas",
+  "filipiniana-gowns": "Filipiniana Gowns",
+  "casual-dress": "Casual Dress",
   "cocktails": "Cocktails",
   "boleros": "Boleros",
 };

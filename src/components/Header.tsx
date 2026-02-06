@@ -100,8 +100,14 @@ export default function Header() {
                       <Link href="/collections/modern-filipinianas" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         Modern Filipinianas
                       </Link>
+                      <Link href="/collections/filipiniana-gowns" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Filipiniana Gowns
+                      </Link>
                       <Link href="/collections/cocktails" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         Cocktails
+                      </Link>
+                      <Link href="/collections/casual-dress" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Casual Dress
                       </Link>
                       <Link href="/collections/boleros" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         Boleros
@@ -206,11 +212,25 @@ export default function Header() {
                     Modern Filipinianas
                   </Link>
                   <Link 
+                    href="/collections/filipiniana-gowns" 
+                    className="block text-sm text-gray-600 hover:text-gray-900 py-1"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Filipiniana Gowns
+                  </Link>
+                  <Link 
                     href="/collections/cocktails" 
                     className="block text-sm text-gray-600 hover:text-gray-900 py-1"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Cocktails
+                  </Link>
+                  <Link 
+                    href="/collections/casual-dress" 
+                    className="block text-sm text-gray-600 hover:text-gray-900 py-1"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Casual Dress
                   </Link>
                   <Link 
                     href="/collections/boleros" 

@@ -19,16 +19,6 @@ export interface Gown {
 function formatGoogleDriveUrl(url: string): string {
   if (!url || url === '/placeholder-gown.jpg') return '/placeholder-gown.jpg';
   
-  // If already in uc?id= format, convert to thumbnail for faster loading
-  if (url.includes('drive.google.com/uc?id=')) {
-    const idMatch = url.match(/id=([^&]+)/);
-    if (idMatch) {
-      // Use Google Drive's thumbnail/export API for faster loading
-      return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w1000`;
-    }
-    return url;
-  }
-  
   // Extract file ID from various Google Drive URL formats
   let fileId = '';
   
@@ -39,14 +29,24 @@ function formatGoogleDriveUrl(url: string): string {
   }
   
   // Format: https://drive.google.com/open?id=FILE_ID
-  const openMatch = url.match(/[?&]id=([^&]+)/);
-  if (openMatch) {
-    fileId = openMatch[1];
+  if (!fileId) {
+    const openMatch = url.match(/[?&]id=([^&]+)/);
+    if (openMatch) {
+      fileId = openMatch[1];
+    }
   }
   
-  // If we found a file ID, use thumbnail API for faster loading
+  // Format: https://drive.google.com/uc?id=FILE_ID or uc?export=
+  if (!fileId && url.includes('drive.google.com/uc')) {
+    const ucMatch = url.match(/[?&]id=([^&]+)/);
+    if (ucMatch) {
+      fileId = ucMatch[1];
+    }
+  }
+  
+  // If we found a file ID, use Google's direct content serving domain
   if (fileId) {
-    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+    return `https://lh3.googleusercontent.com/d/${fileId}`;
   }
   
   // If no pattern matched, return original URL
