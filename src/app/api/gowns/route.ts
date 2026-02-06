@@ -1,15 +1,17 @@
 import { NextResponse } from "next/server";
 import { getGownsFromSheet } from "@/lib/sheets";
 
-export const revalidate = 60; // Cache for 60 seconds
-export const dynamic = 'force-static';
+// Cache for 5 minutes in production, 1 minute in dev
+export const revalidate = process.env.NODE_ENV === 'production' ? 300 : 60;
 
 export async function GET() {
   try {
     const gowns = await getGownsFromSheet();
+    
     return NextResponse.json(gowns, {
       headers: {
-        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120',
+        // Cache on CDN for 5 minutes, serve stale for 10 minutes while revalidating
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
       },
     });
   } catch (error) {
