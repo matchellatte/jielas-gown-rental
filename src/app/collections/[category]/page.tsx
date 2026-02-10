@@ -16,6 +16,7 @@ const categoryMap: Record<string, string> = {
   "casual-dress": "Casual Dress",
   "cocktails": "Cocktails",
   "boleros": "Boleros",
+  "ethereal-dresses": "Ethereal Dresses",
 };
 
 interface PageProps {
