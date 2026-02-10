@@ -112,6 +112,9 @@ export default function Header() {
                       <Link href="/collections/boleros" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         Boleros
                       </Link>
+                      <Link href="/collections/ethereal-dresses" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Ethereal Dresses
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -238,6 +241,13 @@ export default function Header() {
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Boleros
+                  </Link>
+                  <Link 
+                    href="/collections/ethereal-dresses" 
+                    className="block text-sm text-gray-600 hover:text-gray-900 py-1"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Ethereal Dresses
                   </Link>
                 </div>
               </div>

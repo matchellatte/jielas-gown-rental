@@ -47,8 +47,8 @@ export default function GownCard({ gown }: GownCardProps) {
         </div>
         <div className="text-center">
           <h3 className="text-base md:text-lg text-gray-800 mb-1">{gown.name}</h3>
-          {gown.color && (
-            <p className="text-xs md:text-sm text-gray-500 mb-1">{gown.color}</p>
+          {gown.size && (
+            <p className="text-xs md:text-sm text-gray-500 mb-1">Size: {gown.size}</p>
           )}
           <p className="text-sm md:text-base text-[#b4a188]">{formatPrice(gown.price)}</p>
         </div>
